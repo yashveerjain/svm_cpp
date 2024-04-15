@@ -51,6 +51,7 @@ std::tuple<custom_ai::MatrixXd_f, custom_ai::VectorXd_i> custom_ai::Cifar10::rea
                 file.read(reinterpret_cast<char*>(&blue), per_channel_size);
 
                 target_array[i] = label;
+
                 for (int j=0;j<per_channel_size*3;j++){
                     if (j<per_channel_size) data(i,j) = (float)red[j];
                     else if (j<per_channel_size*2) data(i,j) = (float)green[j-per_channel_size];
@@ -63,9 +64,9 @@ std::tuple<custom_ai::MatrixXd_f, custom_ai::VectorXd_i> custom_ai::Cifar10::rea
     }
 }
 
-cv::Mat custom_ai::Cifar10::get_image_from_data(custom_ai::VectorXd_f data_row){
+cv::Mat custom_ai::Cifar10::getImageFromData(custom_ai::VectorXd_f data_row){
 
-    // convert the format from double to int for data access
+    // convert the format from float to int for data access
     custom_ai::VectorXd_i data_row_int = data_row.cast<int>();
     cv::Mat image(_img_height, _img_width, CV_8UC3);
     int per_channel_size = _img_height*_img_width;
@@ -81,7 +82,7 @@ cv::Mat custom_ai::Cifar10::get_image_from_data(custom_ai::VectorXd_f data_row){
 }
 
 
-void custom_ai::show_image(int label, cv::Mat image){
+void custom_ai::showImage(int label, cv::Mat image){
     
     std::cout << "Resized image shape (method 1): " << image.size() << std::endl;
     cv::Mat resized_image;
