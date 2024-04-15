@@ -1,7 +1,5 @@
-
-
 # SVM for cpp
-
+Implemented Linear SVM training on Cifar10 dataset using c++.
 
 ## Dataset used
 * Install Cifar10 dataset which have the files in the `.bin` format. Link to [dataset](https://www.cs.toronto.edu/~kriz/cifar-100-binary.tar.gz).
