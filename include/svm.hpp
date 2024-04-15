@@ -21,9 +21,9 @@ namespace custom_ai{
                 _w(custom_ai::MatrixXd_f::Random(feature_size,output_size)), 
                 _x(input),
                 _y(target){}
-            LinearSVM():_x(custom_ai::MatrixXd_f::Random(1000,100)), _y(custom_ai::VectorXd_i::Zero(1000,1)){}
+            LinearSVM():_x(custom_ai::MatrixXd_f::Random(1000,100)), _y(custom_ai::VectorXd_i::Zero(1000,1)),_w(custom_ai::MatrixXd_f::Random(100,10)){}
             void preprocessor();
-            void train(int epoch=100, int lr=0.01, int batch_size=32);
+            void train(int epoch=100, float lr=0.01, int batch_size=32);
             custom_ai::VectorXd_i predict(std::vector<double> test_data);
             std::tuple<custom_ai::MatrixXd_f, int> loss(custom_ai::MatrixXd_f x, custom_ai::MatrixXd_f pred, custom_ai::VectorXd_i target);
     };
