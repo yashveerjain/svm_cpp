@@ -37,11 +37,13 @@ int main(int argc, char *argv[]){
         custom_ai::LinearSVM svm(dataset.getFeatureSize(),dataset.getTotalClasses(),input_data, label);
         int batch_size = 512, epoch=100;
         float lr = 0.01, reg=0.00001;
-        if (argc>=2) batch_size = std::stoi(argv[2]);
-        if (argc>=3) lr = std::stof(argv[3]);
-        if (argc>=4) epoch=std::stoi(argv[4]);
-        if (argc>=5) reg = std::stof(argv[5]);
-        if (argc>=6) {
+        std::string model_path = "model.bin"; // default path
+        if (argc>=2) model_path = argv[2];
+        if (argc>=3) batch_size = std::stoi(argv[3]);
+        if (argc>=4) lr = std::stof(argv[4]);
+        if (argc>=5) epoch=std::stoi(argv[5]);
+        if (argc>=6) reg = std::stof(argv[6]);
+        if (argc>=7) {
         // take 1 image from any of the row from the input data, as each row is the image of cifar dataset.
             cv::Mat image = dataset.getImageFromData(input_data.row(test_row));
 
@@ -50,6 +52,8 @@ int main(int argc, char *argv[]){
 
         printf("Batch Size %d, Epoch %d, regularization : %f and lr : %f\n",batch_size,epoch,reg, lr);
         svm.train(epoch, lr, batch_size, reg);
+        svm.save_model(model_path);
+
     }
     catch (std::exception& e){
         std::cerr << "Error : "<<e.what()<<std::endl;

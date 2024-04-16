@@ -3,6 +3,10 @@
 #include<vector>
 #include<tuple>
 #include<cstdlib>
+#include<fstream>
+#include<iostream>
+#include <filesystem>
+#include <stdexcept>
 
 #include <eigen3/Eigen/Dense>
 #include <eigen3/Eigen/Core>
@@ -11,7 +15,7 @@
 #include "data_utils.hpp"
 
 using std::cout;
-
+namespace fs = std::filesystem;
 
 
 /**
@@ -242,4 +246,63 @@ void custom_ai::LinearSVM::train(int epoch, float lr, int batch_size, float reg)
             printf("Loss : %f | Accuracy : %f \n", avg_loss, avg_acc);
         }
     }
+}
+
+/**
+ * @brief Predicts classes for given test data using the trained Linear SVM model
+ * 
+ * @param test_data The feature input for which predictions are to be made
+ * @return custom_ai::VectorXd_i The predicted classes for the test data
+ */
+custom_ai::VectorXd_i custom_ai::LinearSVM::predict(custom_ai::MatrixXd_f& test_data){
+    // Preprocess the test data by adding a column of ones for bias and scaling
+    custom_ai::MatrixXd_f _test_data(test_data.rows(), test_data.cols() + 1); // Initialize matrix for preprocessed test data
+    std::cout<<"Rows : "<<test_data.rows()<<" Cols : "<<test_data.cols()<<std::endl;
+    
+    _test_data.topRightCorner(test_data.rows(), test_data.cols()) = preprocessor(test_data, test_data.rows(), test_data.cols()); // Perform preprocessing
+
+    // Calculate scores for the test data using the trained weights
+    custom_ai::MatrixXd_f scores = _test_data * _w;
+
+    // Predict classes from the computed scores
+    return predictClassFromScores(scores);
+}
+
+
+void custom_ai::LinearSVM::save_model(std::string model_path){
+
+
+    std::ofstream file(model_path, std::ios_base::binary | std::ios_base::out);
+
+    int row = _w.rows(), col = _w.cols();
+    // reference : https://eigen.tuxfamily.org/dox/group__TopicStorageOrders.html
+    file.write(reinterpret_cast<char*>(&row),sizeof(int));
+    file.write(reinterpret_cast<char*>(&col),sizeof(int));
+    file.write(reinterpret_cast<char*>(_w.data()), sizeof(float)*_w.size());
+
+    printf("Saving the weight with mean %f in file %s\n",_w.mean(),model_path);
+}
+
+
+void custom_ai::LinearSVM::load_model(std::string model_path){
+    //by default it will assume the weight size initialized during the initialization of the SVM class object.
+    // custom_ai::MatrixXd_f mat(_w.rows(),_w.cols());
+
+    if (!fs::exists(model_path)){
+        throw std::runtime_error("Model path doesn't exist"+model_path);
+    }
+
+    std::ifstream file(model_path, std::ios_base::binary | std::ios_base::in);
+    int row=_w.rows(),col=_w.cols();
+    file.read(reinterpret_cast<char*>(&row),sizeof(int));
+    file.read(reinterpret_cast<char*>(&col),sizeof(int));
+    custom_ai::MatrixXd_f mat(row,col);
+    std::cout<<"Rows : "<<mat.rows()<<" Cols : "<<mat.cols()<<std::endl;
+    
+    // need to know the size of the weight before hand to get the data from the file.
+    file.read(reinterpret_cast<char*>(mat.data()), sizeof(float)*mat.size());
+
+    _w = mat;
+
+    printf("Loading the weight with mean %f from file %s\n",mat.mean(),model_path);
 }

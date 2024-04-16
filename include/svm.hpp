@@ -71,7 +71,7 @@ namespace custom_ai {
          * @param test_data The input test data matrix
          * @return custom_ai::VectorXd_i Predicted class labels for the test data
          */
-        custom_ai::VectorXd_i inference(custom_ai::MatrixXd_f& test_data);
+        custom_ai::VectorXd_i predict(custom_ai::MatrixXd_f& test_data);
 
         /**
          * @brief Compute the SVM loss
@@ -103,5 +103,21 @@ namespace custom_ai {
          * @return float Computed loss
          */
         float loss_vectoriesed(custom_ai::MatrixXd_f& grad_w, const custom_ai::MatrixXd_f& x, const custom_ai::MatrixXd_f& pred, const custom_ai::VectorXd_i& target);
+
+        /**
+         * @brief Saving the model (_w)
+         * 
+         * @param model_path to save the model to.
+         */
+        void save_model(std::string model_path);
+
+        /**
+         * @brief Loading the model (_w)
+         * 
+         * @param model_path 
+         */
+        void load_model(std::string model_path);
+
+        
     };
 } // namespace custom_ai
