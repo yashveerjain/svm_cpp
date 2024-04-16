@@ -12,10 +12,10 @@ Implemented Linear SVM training on Cifar10 dataset using c++.
 mkdir -p build && cd build
 cmake ..
 make
-./test ../data/cifar-10-batches-bin/data_batch_1.bin 1000 0.01 100  
+./main ../data/cifar-10-batches-bin/data_batch_1.bin 1000 0.01 100 0.00001 show  
 ```
 
-* Details of the command : ./test `dataset_filepath` `batch size` `learning rate` `epochs`
+* Details of the command : ./main `dataset_filepath` `batch size` `learning rate` `epochs` `regularization coefficient` `show sample image`
 * Supports regularization but not in argument right now.
 * can show the image of the extracted data.
 
