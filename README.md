@@ -6,16 +6,16 @@ Implemented Linear SVM training on Cifar10 dataset using c++.
 * Unzip the file and extract in this directory.
 
 ## Linear SVM
-* Instruction to install the package and run the file
+* Instruction to install the package and run the file to train the model
 
 ```
 mkdir -p build && cd build
 cmake ..
 make
-./main ../data/cifar-10-batches-bin/data_batch_1.bin 1000 0.01 100 0.00001 show  
+./train ../data/cifar-10-batches-bin/data_batch_1.bin 1000 0.01 100 0.00001 show  
 ```
 
-* Details of the command : ./main `dataset_filepath` `batch size` `learning rate` `epochs` `regularization coefficient` `show sample image`
+* Details of the command : ./train `dataset_filepath` `batch size` `learning rate` `epochs` `regularization coefficient` `show sample image`
 * Supports regularization but not in argument right now.
 * can show the image of the extracted data.
 
@@ -30,5 +30,6 @@ make
     ```
 2. Opencv>=4
 
-## Issues
-* Training is not converging some issues with training pipeline. (Need to debug).
+## TODO
+* Saving and loading model
+* Add inference script
