@@ -35,7 +35,7 @@ int main(int argc, char *argv[]){
         printf("Value of feature at row %d and col %d, is : %f\n",test_row,2,test_data(test_row,2));
         printf("Value of target at row %d and col %d, is : %d\n",test_row,1,test_label(test_row));
 
-        custom_ai::LinearSVM svm(dataset.getFeatureSize(),dataset.getTotalClasses(),test_data, test_label);
+        svm::LinearSVM linear_svm(dataset.getFeatureSize(),dataset.getTotalClasses(),test_data, test_label);
         
         std::string model_path = "model.bin"; // default path
         if (argc>=1) model_path = argv[2];
@@ -46,9 +46,9 @@ int main(int argc, char *argv[]){
             custom_ai::showImage(test_label(test_row), image);
         }
         cout<<"Model Path : "<<model_path<<endl;
-        svm.load_model(model_path);
-        custom_ai::VectorXd_i predictions =  svm.predict(test_data);
-        std::cout << "accuracy : "<<svm.computeAccuracy(predictions, test_label)<<std::endl;
+        linear_svm.loadModel(model_path);
+        custom_ai::VectorXd_i predictions =  linear_svm.predict(test_data);
+        std::cout << "accuracy : "<<linear_svm.computeAccuracy(predictions, test_label)<<std::endl;
     }
     catch (std::exception& e){
         std::cerr << "Error : "<<e.what()<<std::endl;

@@ -34,7 +34,7 @@ int main(int argc, char *argv[]){
         printf("Value of feature at row %d and col %d, is : %f\n",test_row,2,input_data(test_row,2));
         printf("Value of target at row %d and col %d, is : %d\n",test_row,1,label(test_row));
 
-        custom_ai::LinearSVM svm(dataset.getFeatureSize(),dataset.getTotalClasses(),input_data, label);
+        svm::LinearSVM linear_svm(dataset.getFeatureSize(),dataset.getTotalClasses(),input_data, label);
         int batch_size = 512, epoch=100;
         float lr = 0.01, reg=0.00001;
         if (argc>=2) batch_size = std::stoi(argv[2]);
@@ -49,7 +49,7 @@ int main(int argc, char *argv[]){
         }
 
         printf("Batch Size %d, Epoch %d, regularization : %f and lr : %f\n",batch_size,epoch,reg, lr);
-        svm.train(epoch, lr, batch_size, reg);
+        linear_svm.train(epoch, lr, batch_size, reg);
     }
     catch (std::exception& e){
         std::cerr << "Error : "<<e.what()<<std::endl;

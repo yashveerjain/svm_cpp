@@ -37,3 +37,4 @@ make
 
 ## TODO
 * Add inference script
+* Optimise loss function

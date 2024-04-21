@@ -9,7 +9,7 @@
 
 // using namespace Eigen::placeholders;
 
-namespace custom_ai {
+namespace svm {
     /**
      * @brief Class for Linear Support Vector Machine (Linear SVM)
      */
@@ -55,7 +55,7 @@ namespace custom_ai {
          * @param batch_size Batch size for training (default: 32)
          * @param reg Regularization parameter (default: 0)
          */
-        void train(int epoch = 100, float lr = 0.01, int batch_size = 32, float reg = 0);
+        void train(int epoch = 100, float lr = 0.01, int batch_size = 32, float reg = 0, bool monitor_time = false);
 
         /**
          * @brief Predict class labels from scores predicted by the linear model
@@ -82,7 +82,19 @@ namespace custom_ai {
          * @param target Correct labels for the feature input
          * @return float Computed loss
          */
-        float loss(custom_ai::MatrixXd_f& grad_w, const custom_ai::MatrixXd_f& x, const custom_ai::MatrixXd_f& pred, const custom_ai::VectorXd_i& target);
+        float lossNaive(custom_ai::MatrixXd_f& grad_w, const custom_ai::MatrixXd_f& x, const custom_ai::MatrixXd_f& pred, const custom_ai::VectorXd_i& target);
+
+        /**
+         * @brief Compute the SVM loss optimization with thread
+         * 
+         * @param grad_w Gradient of weights
+         * @param x Feature input
+         * @param pred Predicted scores by the linear model
+         * @param target Correct labels for the feature input
+         * @return float Computed loss
+         */
+        float lossThreadOptimized(custom_ai::MatrixXd_f& grad_w, const custom_ai::MatrixXd_f& x, const custom_ai::MatrixXd_f& pred, const custom_ai::VectorXd_i& target);
+
 
         /**
          * @brief Compute the accuracy of predictions
@@ -102,22 +114,31 @@ namespace custom_ai {
          * @param target Correct labels for the feature input
          * @return float Computed loss
          */
-        float loss_vectoriesed(custom_ai::MatrixXd_f& grad_w, const custom_ai::MatrixXd_f& x, const custom_ai::MatrixXd_f& pred, const custom_ai::VectorXd_i& target);
+        float lossVectoriesed(custom_ai::MatrixXd_f& grad_w, const custom_ai::MatrixXd_f& x, const custom_ai::MatrixXd_f& pred, const custom_ai::VectorXd_i& target);
 
         /**
          * @brief Saving the model (_w)
          * 
          * @param model_path to save the model to.
          */
-        void save_model(std::string model_path);
+        void saveModel(std::string model_path);
 
         /**
          * @brief Loading the model (_w)
          * 
          * @param model_path 
          */
-        void load_model(std::string model_path);
+        void loadModel(std::string model_path);
 
+        /**
+         * @brief generate random batch of batch_size from the training data of size N
+         * 
+         * @param x_batch 
+         * @param y_batch 
+         * @param N 
+         * @param batch_size 
+         */
+        void genRandomBatch(custom_ai::MatrixXd_f &x_batch, custom_ai::VectorXd_i &y_batch , const int &N, const int &batch_size);
         
     };
 } // namespace custom_ai
